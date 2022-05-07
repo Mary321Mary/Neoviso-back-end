@@ -19,9 +19,12 @@ module.exports = {
     bootstrap({ strapi }) {
         const {
             getDepartments,
+            getCustomers,
             getCustomer,
-            getAppointment,
-            getEmployee
+            getAppoitsCustomer,
+            getAppointments,
+            getEmployees,
+            getUser
         } = require('../config/functions/utils/database');
 
         process.nextTick(() =>{
@@ -30,7 +33,7 @@ module.exports = {
             var io = new Server(strapi.server.httpServer, {
                 cors: {
                     origin: "http://localhost:8080",
-                    methods: ["GET"],
+                    methods: ["GET", "POST", "PUT", "DELETE"],
                     allowedHeaders: ["my-custom-header"],
                     credentials: true
                 }
@@ -39,36 +42,71 @@ module.exports = {
             io.on('connection', async function(socket) {
                 console.log("a user connected")
 
-                socket.on('departments', async(callback) => {
+                socket.on('departments', async () => {
                     console.log('departments-socket');
                     try {
-                        const deps = await getDep();
-                        socket.emit('departments', deps);
-                        callback();
-                        callback(deps);
+                        const departments = await getDepartments();
+                        socket.emit('departments', departments);
                     } catch(err) {
                         console.log("Err occured, Try again!", err);
                     }
                 })
 
-                
-                const departments = await getDepartments();
-                socket.emit('departments', departments);
-                
-                const customers = await getCustomer();
-                socket.emit('customers', customers);
-                
-                const appointments = await getAppointment();
-                //console.log(appointments)
-                socket.emit('appointments', appointments);
-                
-                const employees = await getEmployee();
-                //console.log(employees)
-                socket.emit('employees', employees);
+                socket.on('customers', async({ page, recordsPerPage }) => {
+                    try {
+                        const customers = await getCustomers(page, recordsPerPage);
+                        socket.emit('customers', customers);
+                    } catch(err) {
+                        console.log("Err occured, Try again!", err);
+                    }
+                })
+
+                socket.on('customer', async({ id }) => {
+                    try {
+                        const customers = await getCustomer(id);
+                        socket.emit('customer', customers);
+                    } catch(err) {
+                        console.log("Err occured, Try again!", err);
+                    }
+                })
+
+                socket.on('appointments-customer', async({ id, page, recordsPerPage }) => {
+                    try {
+                        const appointments = await getAppoitsCustomer(id, page, recordsPerPage);
+                        socket.emit('appointments-customer', appointments);
+                    } catch(err) {
+                        console.log("Err occured, Try again!", err);
+                    }
+                })
+
+                socket.on('appointments', async({ page, recordsPerPage }) => {
+                    try {
+                        const appointments = await getAppointments(page, recordsPerPage);
+                        socket.emit('appointments', appointments);
+                    } catch(err) {
+                        console.log("Err occured, Try again!", err);
+                    }
+                })
+
+                socket.on('employees', async() => {
+                    try {
+                        const employees = await getEmployees();
+                        socket.emit('employees', employees);
+                    } catch(err) {
+                        console.log("Err occured, Try again!", err);
+                    }
+                })
+
+                socket.on('user', async ({ id }) => {
+                    try {
+                        const user = await getUser(id);
+                        socket.emit('user', user);
+                    } catch(err) {
+                        console.log("Err occured, Try again!", err);
+                    }
+                })
             });
-
             strapi.io = io;
-
         })
-    },
+    }
 };

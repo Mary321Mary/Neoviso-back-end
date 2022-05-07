@@ -4,7 +4,8 @@
   "info": {
     "singularName": "employee",
     "pluralName": "employees",
-    "displayName": "Employee"
+    "displayName": "Employee",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -34,6 +35,12 @@
       "relation": "oneToMany",
       "target": "api::appointment.appointment",
       "mappedBy": "Employee"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "employee"
     }
   }
 }
