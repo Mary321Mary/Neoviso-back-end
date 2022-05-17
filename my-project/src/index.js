@@ -61,24 +61,6 @@ module.exports = {
                     }
                 })
 
-                socket.on('customer', async({ id }) => {
-                    try {
-                        const customers = await getCustomer(id);
-                        socket.emit('customer', customers);
-                    } catch(err) {
-                        console.log("Err occured, Try again!", err);
-                    }
-                })
-
-                socket.on('appointments-customer', async({ id, page, recordsPerPage }) => {
-                    try {
-                        const appointments = await getAppoitsCustomer(id, page, recordsPerPage);
-                        socket.emit('appointments-customer', appointments);
-                    } catch(err) {
-                        console.log("Err occured, Try again!", err);
-                    }
-                })
-
                 socket.on('appointments', async({ page, recordsPerPage }) => {
                     try {
                         const appointments = await getAppointments(page, recordsPerPage);

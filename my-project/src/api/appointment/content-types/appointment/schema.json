@@ -4,7 +4,8 @@
   "info": {
     "singularName": "appointment",
     "pluralName": "appointments",
-    "displayName": "Appointment"
+    "displayName": "Appointment",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -20,16 +21,16 @@
     "end": {
       "type": "time"
     },
-    "Employee": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::employee.employee",
-      "inversedBy": "Appointments"
-    },
     "Customer": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::customer.customer",
+      "inversedBy": "Appointments"
+    },
+    "Employee": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
       "inversedBy": "Appointments"
     }
   }

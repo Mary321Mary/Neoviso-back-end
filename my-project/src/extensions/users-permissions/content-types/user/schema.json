@@ -63,17 +63,26 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "customer": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::customer.customer",
-      "inversedBy": "users_permissions_user"
+    "Name": {
+      "type": "string"
     },
-    "employee": {
+    "Phone": {
+      "type": "string"
+    },
+    "Address": {
+      "type": "string"
+    },
+    "Department": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::employee.employee",
-      "inversedBy": "users_permissions_user"
+      "relation": "manyToOne",
+      "target": "api::department.department",
+      "inversedBy": "users"
+    },
+    "Appointments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::appointment.appointment",
+      "mappedBy": "Employee"
     }
   }
 }
